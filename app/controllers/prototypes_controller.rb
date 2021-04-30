@@ -2,10 +2,6 @@ class PrototypesController < ApplicationController
   before_action :authenticate_user!, only: [:edit, :new, :delete]
   #この記述により、ログインしていないユーザーをログインページの画面に促すことができます。
 
-  def contributor_confirmation
-    redirect_to root_path unless current_user == @prototype.user
-  end
-
   def index
     #モデル名.includes(:紐付くモデル名)
     @prototypes = Prototype.includes(:user)
