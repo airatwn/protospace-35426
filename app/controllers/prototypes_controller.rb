@@ -1,5 +1,7 @@
 class PrototypesController < ApplicationController
   before_action :authenticate_user!, only: [:edit, :new, :delete]
+  before_action :move_to_index, only: [:edit, :update, :destroy]
+
   #この記述により、ログインしていないユーザーをログインページの画面に促すことができます。
 
   def index
@@ -56,10 +58,15 @@ class PrototypesController < ApplicationController
     params.require(:prototype).permit(:title, :image, :concept, :catch_copy).merge(user_id: current_user.id)
   end
 
-  def contributor_confirmation
-    redirect_to root_path unless current_user == @prototype.user
+
+  def move_to_index
+    @prototype = Prototype.find(params[:id])
+    unless @prototype.user == current_user
+      redirect_to action: :index
+    end
   end
   #ログイン状態のユーザーであっても、他のユーザーのプロトタイプ編集ページのURLを直接入力して遷移しようとすると、トップページにリダイレクトされること
+
 
 end
 
